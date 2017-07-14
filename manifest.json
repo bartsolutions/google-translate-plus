@@ -1,11 +1,9 @@
 {
   "name": "Google Translate Plus",
+  "short_name": "GTPlus",
   "description": "Translate the definition by google translate.",
-  "version": "1.1.1.0",
+  "version": "0.0.1.0",
   "icons": { "48": "image/icon-48x48.png" },
-  "permissions": [
-    "activeTab"
-  ],
   "content_scripts":  [{
       "matches": ["https://translate.google.com/*"],
       "js": ["lib/jquery-3.1.0.min.js",

@@ -22,8 +22,7 @@ function getDefinitionInformation(){
     var synonyms = [];
     for (var i = 0; i < selector.length; i++){
         var currentSelector = selector.eq(i);
-        text.push(currentSelector.children(
-            '.gt-def-row').text().replace(/;/g, ','));
+        text.push(currentSelector.children('.gt-def-row').text());
 
         var example = currentSelector.children('.gt-def-example').text();
         if (example !== '') {
@@ -37,19 +36,19 @@ function getDefinitionInformation(){
     return {text: text, examples: examples, synonyms: synonyms};
 }
 
-function getPreparedInformation(translateText){
+function getPreparedInformation(sourceText){
     var posInformation = getPOSInformation();
     var definitionInformation = getDefinitionInformation();
     var synonymTitle = $('.gt-def-synonym-title').eq(0).text();
-    var toShowTitle = $('.gt-cd-md > .gt-cd-t > .gt-cd-tl > div').text().
-                        replace(translateText, '<span class="notranslate">(' +
-                                translateText + ')</span>');
+
+    var toShowTitle = $('.gt-cd-md > .gt-cd-t > .gt-cd-tl > div').text()
+                       .replace(sourceText, '<span id=gtp_bart ' +
+			       'class="notranslate">' + sourceText + '</span>');
 
     //line feed by '; '
-    var toTranslateText = definitionInformation.text.join('; ');
-    toTranslateText += '; ' + posInformation.posList.join('; ') +
-                       '; ' + synonymTitle +
-                       '; ' + toShowTitle;
+    var toTranslateText = definitionInformation.text.join('; |; ');
+    toTranslateText += '; |; ' + posInformation.posList.join('; |; ') +
+                       '; |; ' + synonymTitle + '; |; ' + toShowTitle;
 
     return {toTranslateText: toTranslateText,
             notToTranslateInformation: {posIndexs: posInformation.posIndexs,
@@ -58,33 +57,43 @@ function getPreparedInformation(translateText){
            };
 }
  
-function showResult(data, notToTranslateInformation){
-    var translatedResult = [];
+function showResult(data, notToTranslateInformation, sourceText){
+    var translatedText = '';
     var i;
     for (i = 0; i < data[0].length; i++){
-        var translatedText = data[0][i][0];
-        if (translatedText.slice(-1) == ';'){
-            translatedText = translatedText.substr(0, translatedText.length-1);
-        }
-        translatedResult.push(translatedText);
+        translatedText += data[0][i][0];
     }
 
-    var toShowResult = '<div class="result_header"><p class="result_title">' +
-                       translatedResult.pop().replace('</ span>', '</span>') +
-                       '</p><a href="https://www.bart.com.hk?from=t-p">' +
+    var translatedTextList = translatedText.split('|;');
+    var translatedResultList = [];
+    for (i = 0; i < translatedTextList.length; i++){
+        var translatedResult = translatedTextList[i];
+        if (translatedResult.lastIndexOf('; ') === translatedResult.length - 2){
+            translatedResult = translatedResult.substr(
+                                    0, translatedResult.length-2);
+        }
+        translatedResultList.push(translatedResult);
+    }
+
+    var toShowResult = '<div class="extension_info">' +
+                       '<p class="extension_name">Google Translate Plus</p>' +
+                       '<a href="https://www.bart.com.hk?from=t-p">' +
                        '<img class="bart_logo" ' +
                        'title="Powered By Bart Soluions" ' +
                        'src="http://gtranslateplus.com/bart-logo.24.png"/>' +
-                       '</a></div>';
+                       '</a></div><div class="result_header">' +
+                       '<p class="result_title">' +
+                       translatedResultList.pop().replace('</ span>', '</span>') +
+                       '</p></div>';
 
     var posIndexs = notToTranslateInformation.posIndexs;
     var posCount = posIndexs.length;
-    var definitionCount = translatedResult.length - posCount - 1;
+    var definitionCount = translatedResultList.length - posCount - 1;
     var index = 0;
     for (i = 0; i < definitionCount; i++){
         if (index < posCount && (i === 0 || posIndexs.indexOf(i) > -1)){
             toShowResult += '<p class="definition_pos">' +
-                            translatedResult[definitionCount + index] + 
+                            translatedResultList[definitionCount + index] + 
                             '</p>';
             index ++;
         }
@@ -92,19 +101,25 @@ function showResult(data, notToTranslateInformation){
         var synonyms = notToTranslateInformation.synonyms;
         var translatedSynonyms = '';
         if (synonyms[i]) {
-            translatedSynonyms = translatedResult.slice(-1).pop();
+            translatedSynonyms = translatedResultList.slice(-1).pop();
         }
 
         toShowResult += '<div class="translated_text">' +
                         '<p class="translated_definition">' +
-                        translatedResult[i] +
+                        translatedResultList[i] +
                         '</p><p class="definition_example">' +
                         notToTranslateInformation.examples[i] +
                         '</p><p class="definition_synonyms">' +
                         translatedSynonyms + synonyms[i] + '</div>';
     }
 
-    $('#definition_translated_result').html(toShowResult);    
+    var showDom = $(toShowResult);
+
+    //change translated source text to original source text
+    showDom.find('#gtp_bart').text(sourceText);
+    $('#definition_translated_result').append(showDom);
+
+    $( ".cd-expand-button" ).click();
 }
 
 function translateDefinition(){
@@ -121,12 +136,14 @@ function translateDefinition(){
         var languages = currentUrl.split('#')[1].split('/');
         var fromLanguage = languages[0];
         var toLanguage = languages[1];
-        var translateText = decodeURI(languages[2]);
 
         $('.gt-cc-r').before(
             '<div id="definition_translated_result" class="gt-cc-r"></div>');
 
-        var preparedInformation = getPreparedInformation(translateText);
+        var sourceText = $(
+                '.gt-cd-md > .gt-cd-t > .gt-cd-tl > div > span').text();
+
+        var preparedInformation = getPreparedInformation(sourceText);
         var toTranslateText = preparedInformation.toTranslateText;
 
         var translateUrl = 'https://translate.googleapis.com' +
@@ -136,7 +153,8 @@ function translateDefinition(){
 
         $.get(translateUrl, function(data, status){
             if (status === 'success'){
-                showResult(data, preparedInformation.notToTranslateInformation);
+                showResult(data, preparedInformation.notToTranslateInformation,
+                           sourceText);
             }
         });
     }
