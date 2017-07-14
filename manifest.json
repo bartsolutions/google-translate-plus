@@ -1,0 +1,20 @@
+{
+  "name": "Google Translate Plus",
+  "description": "Translate the definition by google translate.",
+  "version": "1.1.1.0",
+  "icons": { "48": "image/icon-48x48.png" },
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts":  [{
+      "matches": ["https://translate.google.com/*"],
+      "js": ["lib/jquery-3.1.0.min.js",
+             "content.js"],
+	  "css": [ "css/style.css"]
+  }],
+  "browser_action": {
+    "default_title": "Google Translate Plus",
+	"default_icon" : "image/icon-98x81.png"
+  },
+  "manifest_version": 2
+}

@@ -1,0 +1,46 @@
+#definition_translated_result {
+    background-color: #F0F8FF;
+}
+
+#definition_translated_result .definition_pos {
+    padding-left: 10px;
+    margin: 5px 0;
+}
+
+.translated_text {
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.translated_definition, .definition_example, .definition_synonyms {
+    padding-left: 40px;
+    margin: 0;
+}
+
+.translated_definition {
+    color: #000000;
+    padding-bottom: 3px;
+}
+
+.result_header {
+    width: 100%;
+}
+
+.bart_logo {
+    float: right;
+    margin: 20px;
+}
+
+.result_title {
+    display: inline-block;
+    margin: 20px 0 10px 10px;
+    font-size: 16px;
+}
+
+.definition_example, .definition_synonyms {
+    margin: 5px 0;
+}
+
+.result_title span {
+    color: #000000;
+}
