@@ -64,19 +64,23 @@ function showResult(data, notToTranslateInformation, sourceText){
         translatedText += data[0][i][0];
     }
 
-    var translatedTextList = translatedText.split('|;');
+    var translatedTextList = translatedText.split('|');
     var translatedResultList = [];
     for (i = 0; i < translatedTextList.length; i++){
-        var translatedResult = translatedTextList[i];
-        if (translatedResult.lastIndexOf('; ') === translatedResult.length - 2){
+        var translatedResult = translatedTextList[i].trim();
+	    if (translatedResult.indexOf(';') === 0){
+	        translatedResult = translatedResult.substr(
+		                            1, translatedResult.length);
+	    }
+        if (translatedResult.lastIndexOf(';') === translatedResult.length - 1){
             translatedResult = translatedResult.substr(
-                                    0, translatedResult.length-2);
+                                    0, translatedResult.length-1);
         }
         translatedResultList.push(translatedResult);
     }
 
     var toShowResult = '<div class="extension_info">' +
-                       '<p class="extension_name">Google Translate Plus</p>' +
+                       '<p class="extension_name"><b>Google Translate Plus</b></p>' +
                        '<a href="https://www.bart.com.hk?from=t-p">' +
                        '<img class="bart_logo" ' +
                        'title="Powered By Bart Soluions" ' +
@@ -155,7 +159,9 @@ function translateDefinition(){
             if (status === 'success'){
                 showResult(data, preparedInformation.notToTranslateInformation,
                            sourceText);
-            }
+            } else {
+	    	console.log('translate failed');
+	    }
         });
     }
 
@@ -170,4 +176,4 @@ var observer = new MutationObserver(function (mutations) {
 //observe whether the definition change
 observer.observe($('.gt-cd-md')[0], {attributes: true, characterData: true});
 
-window.onbeforeunload = translateDefinition();
+setTimeout(translateDefinition, 200);
