@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Gmail Notes Options</title>
+<script src="lib/jquery-3.1.0.min.js"></script>
+<script src="utils.js"></script>
+<script src="options.js"></script>
+<link rel="stylesheet" href="css/bulma.min.css">
+<style>
+  * {
+   font-size: 16px;
+   font-family: Arial;
+  }
+
+  #status {
+    color: blue;
+  }
+
+  label.radio {
+    display: block;
+    margin-left: .5em;
+    margin-top: 3px;
+  }
+
+  .faq {
+    background-color: #f5f5f5;
+    padding: 15px;
+    margin: 10px;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  .logo{
+    text-align:right;
+    margin-top:15px;
+  }
+
+  .debugInfo{
+  }
+
+  pre {
+    white-space: normal;
+    word-break: break-all;
+  }
+
+  ul {
+    padding-bottom: 20px;
+  }
+
+  .demo img {
+    max-width: 100%;
+  }
+
+#disabled_accounts {
+  margin-left: 20px;
+  color: gray;
+}
+
+#disabled_accounts label {
+  display: block;
+}
+ 
+.debug_line{
+    background-color: #e2e0e0;
+    margin: 0;
+}
+
+.notification.subscription{
+  margin-top: 10px;
+  margin-bottom: 0;
+  line-height: 2;
+  background-color: #fdddd0;
+}
+
+.preferences-header {
+  margin-top: 35px;
+}
+
+.logo img{
+  height: 60px;
+}
+
+.templates_title{
+    margin-left: 15px;
+    font-size: 14px;
+    text-align: left;
+    color: #757575;
+}
+
+.templates_content{
+  margin-top: 22px;
+  height: 210px;
+  width: 100%;
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.simple_template{
+  padding-left: 15px;
+}
+textarea::-webkit-input-placeholder {
+  color: #999999;
+  font-size: 12px;
+}
+
+.social img {
+  height: 24px;
+}
+
+.column .notification {
+  height: 100%;
+}
+
+.notification.review {
+  padding: 8px;
+}
+
+.notification.review a {
+  text-decoration: none;
+}
+</style>
+
+</head>
+<body>
+
+
+<div class="container">
+
+  <div class="level">
+    <div class="level-left logo">
+      <div class="level-item">
+          <a target="_blank" id="bart_logo" href="https://www.bart.com.hk/">
+            <img src="https://www.bart.com.hk/wp-content/logo2.png">
+          </a>
+      </div>
+      <div class="level-item">
+          <a target="_blank" id="bart_logo" href="https://cloud.withgoogle.com/partners/detail/?id=CIGAgICAgMCE8wE%3D&hl=en-GB&language=en">
+            <img src="https://www.bart.com.hk/wp-content/google_partner_badge.png">
+          </a>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item social has-text-centered">
+        Follow us for latest releases, bug fixes and features:&nbsp;
+      </div>
+      <div class="level-item social">
+        <a href="https://www.facebook.com/bartsolutions/" target='_blank'>
+          <img src="https://www.bart.com.hk/wp-content/facebook.png">
+        </a>
+      </div>
+      <div class="level-item social">
+        <a href='https://twitter.com/bartsolutions' target='_blank'>
+          <img src="https://www.bart.com.hk/wp-content/twitter.png">
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div class="columns">
+    <div class="column is-4">
+    <h2 class="subtitle has-text-weight-bold">Google Translate Plus Preferences</h2>
+    <strong>Max words in history:</strong>
+    <div class="control">
+      <label class="radio">
+        <input type="radio" name="max_history" value="0">
+        0 (no history)
+      </label>
+      <label class="radio">
+        <input type="radio" name="max_history" value="5">
+        5
+      </label>
+      <label class="radio">
+        <input type="radio" name="max_history" value="10" checked>
+        10
+      </label>
+      <label class="radio">
+        <input type="radio" name="max_history" value="20">
+        20
+      </label>
+      <label class="radio">
+        <input type="radio" name="max_history" value="30">
+        30
+      </label>
+      <label class="radio">
+        <input type="radio" name="max_history" value="50">
+        50
+      </label>
+    </div>
+    <br/>
+
+    <table>
+      <tr>
+        <td colspan=2>
+          <div id="status"></div>
+          <div> <button id="save" class="button is-link">Save</button> </div> <br/>
+          <div> <button id="review" class="button is-info is-light">Give Us a Five Star Review</button> </div>
+
+        </td>
+      </tr>
+     </table>
+     <br/><br/>
+     <div id="reminder">Please refresh <a href="https://translate.google.com" target="_blank">Google Translate page</a> after installation / making changes.</div><br/>
+     <div>If you like Google Translate Plus, you may also be interested to <a href="https://www.bart.com.hk/products/?f=gtp" target="_blank">other products of ours</a> :)</div>
+   </div>
+
+
+   <div class="column is-8">
+     <div class="faq">
+      <h2 class="subtitle has-text-weight-bold">FAQ</h2>
+      <ul>
+        <li><b>Why is there nothing changed after extension is installed?</b></li>
+        <li>The extension is only effective for <a target='_blank' href='https://translate.google.com/'>Google Translate site</a>. A new block of translated word definition should appear appear for word translations. Word history will also be recorded.
+          <div class="demo">
+            <a target="_blank" href="http://www.bart.com.hk/wp-content/google_translate_plus_sample.png"><img src="http://www.bart.com.hk/wp-content/google_translate_plus_sample.png"/></a>
+          </div>
+      </ul>
+      <ul>
+          <li><b>How do I report a bug / suggset a new feature?</b></li>
+          <li><div>Please <a target='_blank' href='https://www.bart.com.hk/?gtp#ContactUs'>submit your bug or suggestion here</a>.</div> 
+      </ul>
+     </div>
+   </div>
+  </div>
+</div>
+</body>
+</html>
+

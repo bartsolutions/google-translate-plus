@@ -1,58 +1,78 @@
-#definition_translated_result {
+#gtp-definition-translated-result {
     background-color: #F0F8FF;
+    margin-bottom: 40px;
+    border-radius: 8px;
 }
 
-#definition_translated_result .definition_pos {
+#gtp-definition-translated-result .gtp-definition-pos {
     padding-left: 15px;
     margin: 5px 0;
 }
 
-.translated_text {
-    margin-bottom: 20px;
+.gtp-translated-text {
+    padding-bottom: 20px;
     line-height: 1.3;
 }
 
-.translated_definition, .definition_example, .definition_synonyms {
+.gtp-translated-definition, .gtp-definition-example, .gtp-definition-synonyms {
     padding-left: 40px;
     margin: 0;
 }
 
-.translated_definition {
+.gtp-translated-definition {
     color: #000000;
     padding-bottom: 3px;
 }
 
-.result_header {
+.gtp-result-header {
     width: 100%;
 }
 
-.bart_logo {
+.gtp-bart-logo {
     float: right;
     margin: 20px 20px 0 10px;
 }
 
-.result_title {
+.gtp-result-title {
     display: inline-block;
     margin: 20px 0 10px 10px;
     font-size: 16px;
 }
 
-.definition_example, .definition_synonyms {
+.gtp-definition-example, .gtp-definition-synonyms {
     margin: 5px 0;
 }
 
-.result_title span {
+.gtp-result-title span {
     color: #000000;
 }
 
-.extension_info {
+.gtp-extension-info {
     display: flex;
     justify-content: space-between;
 }
 
-.extension_name {
+.gtp-extension-name {
     margin: 25px 0 0 10px;
     font-size: 15px;
     color: #333333;
 }
 
+.sgn-history {
+    margin: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+}
+
+.sgn-history-item {
+    font-size: 13px;
+    background-color: #cdddeb;
+    padding: 8px 16px;
+    margin: 20px 20px 0 0;
+    border-radius: 4px;
+}
+
+.sgn-history-item a:visited {
+    color: blue;
+}
